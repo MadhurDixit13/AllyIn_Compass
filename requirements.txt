@@ -2,3 +2,12 @@ duckdb
 pandas
 pymupdf
 numpy
+sentence-transformers
+qdrant-client
+langchain
+langchain-community
+langchain_experimental
+langchain-core
+sqlalchemy
+duckdb-engine
+dotenv

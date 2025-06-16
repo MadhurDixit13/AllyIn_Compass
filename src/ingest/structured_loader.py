@@ -21,5 +21,5 @@ if __name__ == "__main__":
     print(con.sql("SELECT * FROM orders LIMIT 10").df())
     print(con.sql("SELECT * FROM emissions LIMIT 10").df())
     # Close the connection
-    con.close()
+    # con.close()
 # This script loads all CSV files from a specified folder into DuckDB in memory.
