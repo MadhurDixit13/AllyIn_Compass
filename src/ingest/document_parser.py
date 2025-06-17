@@ -3,6 +3,9 @@ import email
 import os
 import json
 
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+DB_PATH = os.path.join(PROJECT_ROOT, "data", "unstructured")
+OUTPUT_PATH = os.path.join(PROJECT_ROOT, "data", "unstructured", "parsed.jsonl")
 def parse_pdf(file_path):
     with fitz.open(file_path) as doc:
         text = "".join([page.get_text() for page in doc])
@@ -23,7 +26,7 @@ def parse_eml(file_path):
 
     return {"type": "email", "file": os.path.basename(file_path), "subject": subject, "body": body}
 
-def parse_all_files(input_folder, output_path="../../data/unstructured/parsed.jsonl"):
+def parse_all_files(input_folder, output_path=OUTPUT_PATH):
     with open(output_path, "w", encoding="utf-8") as outfile:
         for filename in os.listdir(input_folder):
             path = os.path.join(input_folder, filename)
@@ -39,6 +42,6 @@ def parse_all_files(input_folder, output_path="../../data/unstructured/parsed.js
     print(f"Parsed files written to {output_path}")
 
 if __name__ == "__main__":
-    parse_all_files("../../data/unstructured")
+    parse_all_files(DB_PATH)
 # This script parses PDF and EML files from a specified folder and writes the parsed content to a JSONL file.
 # It uses PyMuPDF for PDF parsing and the email module for EML files.

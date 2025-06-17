@@ -1,40 +1,50 @@
 from langchain_community.utilities import SQLDatabase
 from langchain_experimental.sql import SQLDatabaseChain
-from langchain_community.chat_models.fake import FakeListChatModel
+from langchain_groq import ChatGroq
 from sqlalchemy import create_engine
-import duckdb
 import os
+import dotenv
+import re
 
-# Always write to the same DuckDB file
-DB_PATH = "my_temp.db"
+# Load environment variables (make sure GROQ_API_KEY is set in your .env)
+dotenv.load_dotenv()
 
-# Delete old DB if you want a fresh load (optional)
-if os.path.exists(DB_PATH):
-    os.remove(DB_PATH)
+# PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+# DB_PATH = os.path.join(PROJECT_ROOT, "data", "structured", "my_temp.db")
 
-# Step 1: Load CSVs into the DuckDB file
-con = duckdb.connect(DB_PATH)
-con.execute("CREATE TABLE customers AS SELECT * FROM read_csv_auto('../../data/structured/customers.csv');")
-con.execute("CREATE TABLE orders AS SELECT * FROM read_csv_auto('../../data/structured/orders.csv');")
-con.execute("CREATE TABLE emissions AS SELECT * FROM read_csv_auto('../../data/structured/emissions.csv');")
-con.close()
+# # Always write to the same DuckDB file
+DB_PATH = "../../data/structured/my_temp.db"
 
-# Step 2: Create SQLAlchemy engine pointing to the same file
+# Step 1: Create SQLAlchemy engine
 engine = create_engine(f"duckdb:///{DB_PATH}")
 db = SQLDatabase(engine=engine)
 
-# Step 3: Fake LLM to return correct SQL
-llm = FakeListChatModel(responses=[
-    "SELECT c.name FROM customers c JOIN orders o ON c.customer_id = o.customer_id WHERE o.amount > 500;"
-])
+# Step 2: Initialize Groq LLM using LangChain wrapper
+llm = ChatGroq(
+    api_key=os.getenv("GROQ_API_KEY"),  # Ensure you have set this in your .env file
+    model_name="llama3-70b-8192",  # or use llama3-8b-8192, gemma-7b-it
+    temperature=0
+)
+
+# Step 3: Create SQLDatabaseChain
+db_chain = SQLDatabaseChain.from_llm(llm=llm, 
+                                     db=db, 
+                                     verbose=True,
+                                    #  use_query_checker=True,  # enables basic syntax checking
+                                    #  return_intermediate_steps=True
+                                     )
 
 
+def query_sql(question: str) -> str:
+    result = db_chain.invoke({"query": question})
+    rows = result.get("result", [])  # ensure safe access
+    if not rows:
+        return "No matching records found."
 
-db_chain = SQLDatabaseChain.from_llm(llm=llm, db=db, verbose=True)
+    # Format for human readability
+    flat_result = ", ".join(str(row[0]) for row in rows)
+    return f"Query result: {flat_result}"
 
-def query_sql(question):
-    return db_chain.invoke({"query": question})["result"]
 
 if __name__ == "__main__":
     print(query_sql("Which customers placed an order over $500?"))
-

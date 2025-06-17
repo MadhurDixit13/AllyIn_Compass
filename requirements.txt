@@ -8,6 +8,11 @@ langchain
 langchain-community
 langchain_experimental
 langchain-core
+langchain-groq
 sqlalchemy
 duckdb-engine
 dotenv
+sentence-transformers
+qdrant-client
+neo4j
+groq

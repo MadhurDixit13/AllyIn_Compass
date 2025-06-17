@@ -3,9 +3,12 @@ from sentence_transformers import SentenceTransformer
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance, PointStruct
 import hashlib
+import os
 
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+DB_PATH = os.path.join(PROJECT_ROOT, "data", "unstructured", "parsed.jsonl")
 # Load pre-parsed documents
-def load_documents(file_path="../../data/unstructured/parsed.jsonl"):
+def load_documents(file_path=DB_PATH):
     # Check if the file exists
     try:
         # utf-8 encoding is used to handle special characters in the text

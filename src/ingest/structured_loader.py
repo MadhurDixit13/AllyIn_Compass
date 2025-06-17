@@ -2,8 +2,17 @@ import duckdb
 import pandas as pd
 import os
 
+# # Always write to the same DuckDB file
+# DB_PATH = "../../data/structured/my_temp.db"
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+DB_PATH = os.path.join(PROJECT_ROOT, "data", "structured", "my_temp.db")
+# Delete old DB if you want a fresh load (optional)
+if os.path.exists(DB_PATH):
+    os.remove(DB_PATH)
+
+
 def load_csv_to_duckdb(folder_path):
-    con = duckdb.connect(database=':memory:')
+    con = duckdb.connect(database=DB_PATH)
     
     for filename in os.listdir(folder_path):
         if filename.endswith(".csv"):
