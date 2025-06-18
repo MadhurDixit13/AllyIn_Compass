@@ -16,3 +16,4 @@ sentence-transformers
 qdrant-client
 neo4j
 groq
+streamlit

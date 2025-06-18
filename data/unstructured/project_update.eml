@@ -1,0 +1,17 @@
+From: sender@example.com
+To: recipient@example.com
+Subject: Project Titan - Weekly Update
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+
+Hello Team,
+
+Here’s the weekly update on Project Titan:
+- Backend integration with the billing system is complete.
+- Frontend design review passed with minor changes.
+- Remaining task: Load testing scheduled for Friday.
+
+Keep pushing!
+
+- Bob

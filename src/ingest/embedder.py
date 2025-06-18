@@ -2,11 +2,24 @@ import json
 from sentence_transformers import SentenceTransformer
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance, PointStruct
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 import hashlib
 import os
 
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
 DB_PATH = os.path.join(PROJECT_ROOT, "data", "unstructured", "parsed.jsonl")
+
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=512,
+    chunk_overlap=50,
+    separators=["\n\n", "\n", ".", " "]
+)
+
+def is_garbage(text):
+    return len(set(text.lower().split())) < 30 or "threat think finally figure" in text.lower()
+# This function checks if the text is garbage by looking for a low number of unique words or specific phrases.
+# It returns True if the text is considered garbage, otherwise False.
+
 # Load pre-parsed documents
 def load_documents(file_path=DB_PATH):
     # Check if the file exists
@@ -81,15 +94,26 @@ def upload_to_qdrant(docs, model_name="all-MiniLM-L6-v2", collection_name="docs"
         # If neither key is present, the document is skipped.
         # This allows for flexibility in the document structure, accommodating different parsing methods.
         content = doc.get("text") or doc.get("body", "")
-        if len(content.strip()) == 0: 
+        
+        if len(content.strip()) == 0:
             continue
-
-        # Chunking could be added here if content is long
-        texts.append(content) 
-        payloads.append({"meta": doc}) # Metadata for the document, which can include file name, type, etc.
-
-    vectors = model.encode(texts).tolist()
-
+        if is_garbage(content):
+            continue
+        chunks = text_splitter.split_text(content)
+        # Chunking the text into smaller parts to fit within the model's input limits
+        # This is important for long documents to ensure they can be processed by the model.
+        for i, chunk in enumerate(chunks):
+            texts.append(chunk)
+            
+            payloads.append({"meta": doc, "chunk": i})# Metadata for the document, which can include file name, type, etc.
+        
+    try:
+        vectors = model.encode(texts, show_progress_bar=True).tolist()
+    except Exception as e:
+        print(f"[ERROR] Embedding failed: {e}")
+        return
+    # Encode the texts into vectors using the SentenceTransformer model
+    # The model.encode method converts the list of texts into a list of vectors.
     # Convert vectors to list of lists for Qdrant
     # Qdrant expects vectors to be in a list of lists format, where each inner list is a vector.
     points = [

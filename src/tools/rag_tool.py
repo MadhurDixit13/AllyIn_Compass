@@ -26,18 +26,19 @@ def generate_rag_answer(user_query):
     context = context[:max_context_length] 
     prompt = f"""
     You are a helpful assistant. Use the following context to answer the question.
+    If the context does not contain enough information, respond with "No details available."
+
 
     Context:
     {context}
 
     Question: {user_query}
     Answer:"""
-    
 
-    response = llm.invoke([HumanMessage(content=prompt)]) 
+    response = llm.invoke([HumanMessage(content=prompt)])
 
     return response.content
 
 if __name__ == "__main__":
-    query = "Find reports about carbon emissions in South region"
+    query = "Tell me when the meeting is."
     print(generate_rag_answer(query))

@@ -3,9 +3,9 @@ import email
 import os
 import json
 
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
 DB_PATH = os.path.join(PROJECT_ROOT, "data", "unstructured")
-OUTPUT_PATH = os.path.join(PROJECT_ROOT, "data", "unstructured", "parsed.jsonl")
+OUTPUT_PATH = os.path.join(PROJECT_ROOT, "data", "unstructured",  "parsed.jsonl")
 def parse_pdf(file_path):
     with fitz.open(file_path) as doc:
         text = "".join([page.get_text() for page in doc])

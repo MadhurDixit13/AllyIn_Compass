@@ -1,0 +1,17 @@
+From: sender@example.com
+To: recipient@example.com
+Subject: Feedback from Acme Corp
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+Dear Support Team,
+
+We are extremely pleased with the latest release. The performance improvement=
+s are noticeable, and the new dashboard layout is much more intuitive. One mi=
+nor issue: the export button seems unresponsive on Safari.
+
+Looking forward to future updates.
+
+Best,
+Claire
