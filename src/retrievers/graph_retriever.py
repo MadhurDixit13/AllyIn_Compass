@@ -25,14 +25,14 @@ def run_query_safe(cypher_query, parameters=None):
 
 if __name__ == "__main__":
     cypher = """
-    MATCH (u:User)-[:RATED]->(m:Movie)<-[:RATED]-(other:User)-[:RATED]->(rec:Movie)
-    WHERE u.name = $username AND NOT (u)-[:RATED]->(rec)
-    RETURN rec.title AS recommended_movie, COUNT(*) AS score
-    ORDER BY score DESC
-    LIMIT 5
-    """
-    username = "Angela Thompson"
-    results = run_query(cypher, {"username": username})
+            MATCH (a:Person {name: $actor})-[:ACTED_IN]->(m:Movie)
+            RETURN m.title AS title
+            LIMIT 5
+            """
+
+    actor = "Tom Cruise"  # Example actor name
+    results = run_query(cypher, {"actor": actor})
+
 
     if results:
         for row in results:

@@ -17,3 +17,8 @@ qdrant-client
 neo4j
 groq
 streamlit
+peft 
+transformers
+datasets
+accelerate
+torch

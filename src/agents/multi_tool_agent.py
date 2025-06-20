@@ -18,6 +18,11 @@ llm = ChatGroq(
     model_name="llama3-70b-8192",  # or use llama3-8b-8192, gemma-7b-it
     temperature=0
 )
+def vector_tool_response(query):
+    docs = search_vector(query)
+    texts = [doc.get("meta", {}).get("text", "")[:300] for doc in docs]
+    return "\n\n---\n\n".join(texts)
+
 
 
 # Define LangChain tool wrappers
@@ -29,14 +34,24 @@ tools = [
     ),
     Tool(
         name="VectorSearch",
-        func=lambda q: str(search_vector(q)),
+        # func=lambda q: str(search_vector(q)),
+        func=vector_tool_response,
         description="Use this to retrieve relevant documents or paragraphs from parsed files."
     ),
     Tool(
         name="GraphSearch",
-        func=lambda query: run_graph_query(query),
-        description="Use this tool to answer questions involving relationships or connections between entities "
-        "(e.g., recommending movies to users based on what similar users liked). It works on a Neo4j"
+        func=lambda actor: run_graph_query(
+            """
+            MATCH (a:Person {name: $actor})-[:ACTED_IN]->(m:Movie)
+            RETURN m.title AS title
+            LIMIT 5
+            """,
+            {"actor": actor}
+        ),
+        description=(
+            "Use this to find movies acted in by a person. "
+            "Input should be the actor's full name, like 'Tom Hanks'. Persons full name will be the actor"
+        )
     )
 ]
 agent = initialize_agent(

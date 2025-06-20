@@ -1,0 +1,32 @@
+[
+    {
+        "domain": "Orders",
+        "query": "Which customers placed orders over $500?",
+        "expected_tool": "SQLSearch",
+        "check": "Includes customer names"
+    },
+    {
+        "domain": "Orders",
+        "query": "Who is the customer with id 1?",
+        "expected_tool": "SQLSearch",
+        "check": "Includes order_id or customer_id"
+    },
+    {
+        "domain": "Meetings",
+        "query": "What time is the meeting?",
+        "expected_tool": "VectorSearch",
+        "check": "Includes date and time of the meeting"
+    },
+    {
+        "domain": "Movies",
+        "query": "Recommend me movies of Tom Hanks?",
+        "expected_tool": "GraphSearch",
+        "check": "Includes movie titles"
+    },
+    {
+        "domain": "Meetings",
+        "query": "Summarize key points from the last team meeting",
+        "expected_tool": "VectorSearch",
+        "check": "Includes keywords from meeting transcript"
+    }
+]
