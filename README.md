@@ -78,9 +78,14 @@ streamlit run ui/app.py
 ## 📽 Demo & Deck
 
 - 🎥 [Demo Video](demo_assets/videos/demo.mp4)
-<!-- - 📑 [Slide Deck](demo_assets/slide_deck.pdf) -->
+- 📑 [Slide Deck](demo_assets/slides/RAGent.pdf)
 - 📸 Screenshots: See `demo_assets/images/*.png`
-
+1. [Architecture Diagram](demo_assets/images/architecture_diagram.png)
+2. [UI1](demo_assets/images/ui1.png)
+3. [UI2](demo_assets/images/ui2.png)
+4. [Charts](demo_assets/images/charts.png)
+5. [Qdrant](demo_assets/images/qdrant_graph.png)
+6. [Neo4j](demo_assets/images/neo4j.png)
 ---
 
 ## 🧠 Project Highlights
