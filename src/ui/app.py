@@ -16,9 +16,9 @@ from src.feedback.logger import log_feedback
 from src.dashboards.metrics import load_logs
 
 
-st.set_page_config(page_title="AllyIn Compass", layout="wide")
+st.set_page_config(page_title="My Compass", layout="wide")
 
-st.title("🧭 AllyIn Compass")
+st.title("🧭 My Compass")
 st.markdown("Ask questions and get smart, document-backed answers!")
 st.markdown("---")
 

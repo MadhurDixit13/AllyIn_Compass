@@ -1,6 +1,6 @@
-# 🧭 AllyIn Compass
+# 🧭 My Compass
 
-**AllyIn Compass** is a full-stack, multi-tool AI assistant that answers enterprise queries by intelligently retrieving from structured databases, unstructured documents, and graph-based knowledge using Retrieval-Augmented Generation (RAG) and LangChain agents.
+**My Compass** is a full-stack, multi-tool AI assistant that answers enterprise queries by intelligently retrieving from structured databases, unstructured documents, and graph-based knowledge using Retrieval-Augmented Generation (RAG) and LangChain agents.
 
 ---
 
@@ -77,9 +77,9 @@ streamlit run ui/app.py
 
 ## 📽 Demo & Deck
 
-<!-- - 🎥 [Demo Video](demo_assets/demo.mp4) -->
+- 🎥 [Demo Video](demo_assets/videos/demo.mp4)
 <!-- - 📑 [Slide Deck](demo_assets/slide_deck.pdf) -->
-- 📸 Screenshots: See `demo_assets/*.png`
+- 📸 Screenshots: See `demo_assets/images/*.png`
 
 ---
 
